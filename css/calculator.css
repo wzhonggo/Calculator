@@ -1,0 +1,97 @@
+#calculatorBox {
+    background: none repeat scroll 0 0 #f9f9f9;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(153, 153, 153, 0.8), 0 0 10px rgba(0, 0, 0, 0.5) inset;
+    left: 50%;
+    margin-left: -230px;
+    margin-top: -225px;
+    overflow: hidden;
+    padding-bottom: 20px;
+    position: absolute;
+    top: 50%;
+    width: 500px;
+}
+
+#calculator {
+    width: 500px;
+    /*padding: 0 10px;*/
+    /*background: none repeat scroll 0 0 #f9f9f9;*/
+    /*border-radius: 5px;*/
+    /*box-shadow: 0 0 10px rgba(153, 153, 153, 0.8), 0 0 10px rgba(0, 0, 0, 0.5) inset;*/
+}
+
+#calculator li {
+    list-style: none outside none;
+
+    cursor: pointer;
+
+    border-radius: 5px;
+    float: left;
+    /*font-family: "微软雅黑";*/
+
+    text-align: center;
+    border: 1px solid #363636;
+    color: #fff;
+
+}
+
+#expression {
+    background: none repeat scroll 0 0 #fcfdeb;
+    border: 1px solid #64655f;
+    border-radius: 5px;
+    box-shadow: 0 5px 2px rgba(157, 157, 145, 0.8) inset;
+    /*font-family: "微软雅黑";*/
+    font-size: 40px;
+    height: 82px;
+    margin: 25px 52px 0;
+    outline: medium none;
+    padding: 0 10px;
+    text-align: right;
+    width: 406px;
+}
+
+#calculator .num {
+    height: 44px;
+    width: 74px;
+    margin: 12px 6px 0;
+    background: url("../img/CalculatorButtonBlack.jpg") repeat-x scroll 0 0 rgba(0, 0, 0, 0);
+    line-height: 44px;
+
+}
+
+ #calculator .clear {
+    height: 44px;
+    width: 74px;
+    margin: 12px 6px 0;
+    background: url("../img/CalculatorButtonBlack.jpg") repeat-x scroll 0 0 rgba(0, 0, 0, 0);
+    line-height: 44px;
+
+}
+
+
+ #calculator .back{
+    height: 44px;
+    width: 74px;
+    margin: 12px 6px 0;
+    background: url("../img/CalculatorButtonBlack.jpg") repeat-x scroll 0 0 rgba(0, 0, 0, 0);
+    line-height: 44px;
+
+}
+
+
+#calculator .zero {
+    height: 44px;
+    width: 160px;
+    margin: 12px 6px 0;
+    background: url("../img/CalculatorButtonBlack.jpg") repeat-x scroll 0 0 rgba(0, 0, 0, 0);
+    line-height: 44px;
+}
+
+#calculator .equal {
+    height: 100px;
+    width: 74px;
+    margin: -44px 6px 0;
+    background: url("../img/CalculatorButtonBlackMax.jpg") repeat scroll 0 0 rgba(0, 0, 0, 0);
+    line-height: 100px;
+}
+
