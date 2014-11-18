@@ -1,7 +1,7 @@
 Calculator
 ==========
 
-It is simple Calculator build with Calculator.
+It is simple Calculator build with JavaScript.
 
 
 # 计算器实现
