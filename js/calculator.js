@@ -348,6 +348,14 @@
     calculator = new Calculator();
 
 
+
+    exp.calculatorExpression = function (expression) {
+        var result = calculator.calculate(expression);
+        return result;
+    }
+
+
+
    /**
      * 初始化计算器
      */
