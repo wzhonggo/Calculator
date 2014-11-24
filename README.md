@@ -12,3 +12,5 @@ It is simple Calculator build with JavaScript.
 
 现在计算器只支持不带负号的加减乘除和括号， 可以直接把算式直接复制到输入框。
 
+
+
