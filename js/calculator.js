@@ -10,6 +10,7 @@
 //			"debug": false
         },
 
+
         calculator;
 
     /*
@@ -132,11 +133,7 @@
 
 
     /**
-     *二个数加 减乘除运算
-     */
-
-    /**
-     *
+     * 二个数加 减乘除运算
      * @param one 第一个操作数
      * @param two 第二个操作数
      * @param opeators 运算符
@@ -147,7 +144,7 @@
 //            console.log(one);
 //            console.log(two);
 //            console.log(opeator);
-//            console.log("operator ======================");
+        console.log("operator function : " + one + opeators + two);
         var result;
         switch (opeators) {
             case '+':
@@ -227,40 +224,163 @@
 
 
     /**
-     *
-     */
-
-    /**
      * 计算后缀表达式
-     * @param suffixExpression  后缀表达式
-     * @returns {Array} 后缀表达式的结果
+     * @param suffixExpression 后缀表达式  ("#" 表示这个值是从服务器上得到的)
      */
     Calculator.prototype.calculateSuffixExpression = function (suffixExpression) {
-        var num = new Array();
-        for (var index = 0; index < suffixExpression.length; index++) {
-//                console.log("index" + index);
-            console.log("num" + num);
-            var data = suffixExpression[index];
-//                console.log("data   " + data);
-            if (('0' <= data && data <= '9') || data == '.') {
-                num.push(data);
-            } else {
-//                    console.log("num   " + num);
-//                    var one = parseInt(num.pop(), 10);
-//                    var two = parseInt(num.pop(), 10);
-                var two = parseFloat(num.pop());
-                var one = parseFloat(num.pop());
-                var result = calculator.operator(one, two, data);
-                num.push(result);
+//        var num = new Array();
+        var math = {
+            //数据载入后要执行的函数暂存在这里
+            dataReadyFunc: []
+            //数据源URL及载入状态
+            , dataSource: [], num: [], suffixExpressionVar: []
+            //检查数据源是否全部载入完毕
+            , isReady: function () {
+                console.log("it is ready?" + this.dataSource.length);
+                var isReady = true;
+                for (var key in this.dataSource) {
+                    console.log(key + ":" + this.dataSource[key].data);
+                    if (this.dataSource[key].ready !== true) {
+                        isReady = false;
+                    }
+                }
+
+                return isReady;
             }
-        }
-        return num;
+
+            // 得到真实的数字
+            , getValue: function (obj) {
+                console.log("start get value form server  ....." + obj.data);
+//                        var value = "";
+                var self = this;
+
+                if (obj.data == "#") {
+                    $.ajax({
+                        url: "http://127.0.0.1:9000/value.html",
+//                                async:false,
+                        //                crossDomain: true,
+//                                success: function getValueFormServer (self){
+//                                    function get (data, textStatus) {
+//                                    console.log('received ', data);
+//                                    var random = parseInt(Math.random() * 10 + 1);
+////                                    $("#value").html(random);
+////                                    console.log('received ', $("#value").html());
+//                                      console.log('received ', random);
+//                                    obj.data =random;
+//                                    obj.ready = true
+//                                    console.log(" get value form server : " +obj.data + obj.ready);
+//                                    self.callReady();
+//
+//                                }
+//                                },
+                        success: function get(data, textStatus) {
+//                                    console.log('received ', data);
+                            var random = parseInt(Math.random() * 10 + 1);
+//                                    $("#value").html(random);
+//                                    console.log('received ', $("#value").html());
+//                            console.log('received ', random);
+//                                    obj.data =random;
+                            obj.data = parseFloat(5);
+                            obj.ready = true
+                            console.log(" get value form server : " + obj.data + obj.ready);
+                            self.callReady();
+
+
+                        },
+
+                        dataType: "html"
+
+
+                    });
+
+                } else {
+                    obj.data = parseFloat(obj.data);
+                    obj.ready = true
+                    this.callReady();
+                    console.log(" get value : " + obj.data + obj.ready);
+                }
+
+
+//                        return value;
+            }
+
+            //数据源全部加载完毕，则逐一运行dataReadyFunc中存放的函数
+            , callReady: function () {
+                if (true === this.isReady()) {
+//                    for (var key in this.dataReadyFunc) {
+//
+//                        this.resultNum = this.dataReadyFunc[key](this.dataSource[0].data, this.dataSource[1].data, this.operator);
+//                        this.num.push(this.resultNum);
+//                        console.log("this.resultNum : " + this.resultNum);
+//                        math.dataSource = [];
+//                        math.resultNum = "$"
+//                    }
+                    console.log("callReady   ....." + math.dataSource[0].data + this.operator + this.dataSource[1].data + " " + this.isReady());
+                    this.resultNum = calculator.operator(this.dataSource[0].data, this.dataSource[1].data, this.operator);
+                    this.num.push(this.resultNum);
+                    console.log("this.resultNum : " + this.resultNum);
+                    if (this.suffixExpressionVar.length == 0) {
+                        console.log(" final result : " + this.resultNum);
+//                        calculator.result = this.resultNum[0];
+//                        calculator.setResult(this.resultNum);
+                        calculator.callBack(this.resultNum);
+
+                    } else {
+                        this.dataSource = [];
+                        this.resultNum = "$"
+                        this.getResult(this.suffixExpressionVar);
+                    }
+
+
+                }
+            }, dataReady: function (func) {
+                if (typeof func !== 'function') {
+                    return false;
+                }
+                this.dataReadyFunc.push(func);
+            }, init: function (one, two, three) {
+                this.dataSource.push(one);
+                this.dataSource.push(two);
+                this.operator = three;
+                console.log("init length " + this.dataSource.length);
+                for (var pointer = 0; pointer < this.dataSource.length; pointer++) {
+                    this.getValue(this.dataSource[pointer]);
+
+                }
+
+            }, operator: "", resultNum: "$", getResult: function (suffixExpression) {
+                console.log("suffixExpression " + suffixExpression);
+                while (suffixExpression.length > 0) {
+//                console.log("index" + index);
+                    console.log("num" + this.num);
+                    var data = suffixExpression.pop();
+//                console.log("data   " + data);
+
+
+                    if (('0' <= data && data <= '9') || data == '.' || data == '#') {
+                        this.num.push(data);
+                    } else {
+                        var two = {};
+                        two.data = this.num.pop();
+                        two.ready = false;
+                        var one = {};
+                        one.data = this.num.pop();
+                        one.ready = false;
+                        this.suffixExpressionVar = suffixExpression;
+                        console.log("data ready : " + one.data + two.data + data);
+                        this.init(one, two, data);
+                        break;
+                    }
+                }
+
+            }
+
+        };
+
+
+        math.getResult(suffixExpression);
     }
 
-
-    /**
-     *
-     */
 
     /**
      * 根据中缀表达式生成后缀表达式
@@ -280,11 +400,11 @@
 
         for (var index = 0; index < expression.length; index++) {
             var currentChar = expression[index];
-            console.log("current index char is  : " + currentChar);
-            console.log("operatorStack is : " + operatorStack);
-            console.log("suffixExpression is : " + suffixExpression);
+//            console.log("current index char is  : " + currentChar);
+//            console.log("operatorStack is : " + operatorStack);
+//            console.log("suffixExpression is : " + suffixExpression);
 
-            if (('0' <= currentChar && currentChar <= '9') || currentChar == '.') {
+            if (('0' <= currentChar && currentChar <= '9') || currentChar == '.' || currentChar == '#') {
                 num = num + currentChar;
             } else if (currentChar == "+" || currentChar == "-" || currentChar == "*" || currentChar == "/" || currentChar == "(" || currentChar == ")") {
 
@@ -333,30 +453,53 @@
     Calculator.prototype.calculate = function (expression) {
         console.log("calculate start .....");
         var suffixExpression = calculator.generateSuffixExpression(expression);
-        console.log("generateSuffixExpression : " + suffixExpression);
+        console.log("====================================generateSuffixExpression : " + suffixExpression);
         //calculate  Suffix Expression
-        var result = calculator.calculateSuffixExpression(suffixExpression);
-        console.log("------------------- ");
-        console.log(result);
-        return result;
+        var ex = new Array();
+        while (suffixExpression.length > 0) {
+            ex.push(suffixExpression.pop());
+        }
+        console.log("====================================generateSuffixExpression : " + ex);
+        calculator.calculateSuffixExpression(ex);
+//        var result = calculator.calculateSuffixExpression(ex);
+//        console.log("------------------- ");
+//        console.log(result);
+//        return result;
     }
 
+    Calculator.prototype.callBack;
 
+//    Calculator.prototype.result;
 
+    /**
+     * 初始化回调函数
+     * @param func  在计算完成后会回调这个函数，把结果当做参数
+     * @returns {boolean}
+     */
+    Calculator.prototype.init = function (func) {
+        console.log("init callback ");
+        if (typeof func !== 'function') {
+            return false;
+        }
+        this.callBack = func;
+    }
 
 
     calculator = new Calculator();
 
 
-
-    exp.calculatorExpression = function (expression) {
-        var result = calculator.calculate(expression);
-        return result;
+    /**
+     * 在html 中可以直接调用这个方法来计算表达式
+     * @param expression 中缀表达式
+     * @param callback 回调函数
+     */
+    exp.calculatorExpression = function (expression, callback) {
+        calculator.init(callback);
+        calculator.calculate(expression);
     }
 
 
-
-   /**
+    /**
      * 初始化计算器
      */
     $.init = function () {
@@ -364,12 +507,12 @@
         var calculatorDiv = $('<div id="calculatorBox"><div id="calculator">' +
             ' <input type="text" id="expression">' +
             ' <ul class="one clearfix"> ' +
-            '<li class="clear">C</li>' + '<li class="back">back</li>' + '<li class="num">(</li>' + '<li class="num">)</li>' + '<li class="num"></li>' +
+            '<li class="clear">C</li>' + '<li class="back">back</li>' + '<li class="num">(</li>' + '<li class="num">)</li>' + '<li class="num">#</li>' +
             '<li class="num">7</li>' + '<li class="num">8</li>' + '<li class="num">9</li>' + '<li class="num">/</li>' + '<li class="num"></li>' +
             '<li class="num">4</li>' + '<li class="num">5</li>' + '<li class="num">6</li>' + '<li class="num">*</li>' + '<li class="num"></li>' +
             '<li class="num">1</li>' + '<li class="num">2</li>' + '<li class="num">3</li>' + '<li class="num">-</li>' +
             '<li class="zero">0</li>' + '<li class="num">.</li>' + '<li class="num">+</li>' + '<li class="equal black">=</li>' +
-            '</ul> </div></div>');
+            '</ul> </div></div>  <div id="value"></div>');
 //    calculatorDiv.attr("id", "calculator");
 //    calculatorDiv.html("it is test")
 
@@ -382,7 +525,7 @@
         });
 
         $('#calculator').on('click', '.clear', function (e) {
-           $("#expression").val("");
+            $("#expression").val("");
         });
 
         $('#calculator').on('click', '.back', function (e) {
@@ -399,22 +542,32 @@
             }
         });
 
-
-        $('#calculator').on('click', '.equal', function (e) {
-            var expression = $("#expression").val();
-            var result = calculator.calculate(expression);
+        //设置回调函数
+        var setResult = function (result) {
+            console.log("calculate final result is " + result);
             if (result != NaN) {
                 $("#expression").val(result);
             } else {
                 $("#expression").val("it is error , please enter again");
             }
+        }
+
+
+        $('#calculator').on('click', '.equal', function (e) {
+            var expression = $("#expression").val();
+            calculator.init(setResult);
+            calculator.calculate(expression);
+//            var result = calculator.calculate(expression);
+//            if (result != NaN) {
+//            } else {
+//                $("#expression").val(result);
+//                $("#expression").val("it is error , please enter again");
+//            }
         });
 
         console.log("Calculator is init .");
 
     }
-
-
 
 
 })(window, window.jQuery);
