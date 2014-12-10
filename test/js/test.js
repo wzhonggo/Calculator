@@ -13,6 +13,7 @@ QUnit.test("hello test", function (assert) {
 //QUnit.test("calculator Expression 2", function( assert ) {
 //  assert.ok(calculatorExpression("1+(2*3+(4*5+6)*7)") == "189", "Passed!" );
 //});
+//module("计算器测试");
 
 var test1 = function (result) {
     QUnit.test("calculator Expression test1", function (assert) {
@@ -40,3 +41,4 @@ calculatorExpression("1+#-3", test3);
 //QUnit.test("calculator Expression 3", function( assert ) {
 //  assert.ok(calculatorExpression("1+#-3") == "3", "Passed!" );
 //});
+

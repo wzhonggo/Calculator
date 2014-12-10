@@ -1,92 +1,17 @@
 <html>
 <head>
     <script src="js/jquery-1.8.3.min.js" type="text/javascript"></script>
+    <script src="js/utils.js" type="text/javascript"></script>
+    <script src="js/underscore-min.js" type="text/javascript"></script>
+    <script src="js/Engine2.js" type="text/javascript"></script>
+
     <script type="text/javascript">
-        $(document).ready(function () {
-
-
-//            var value = parseInt(Math.random() * 10 + 1);
-//            console.log(value);
-//            $("#value").html(value);
-
-
-
-        });
-
-        function test(){
-//            alert("test");
-            console.log("it is test");
-        }
-
-
-            setInterval(test(), 2000);
-
-        for(var i = 1; i <= 3; i++) {
-            console.log(i);
-         setTimeout(function(){
-
-              console.log(i);
-
-         },100000);
-
-   }
-
-      /*  // 事件对象
-        var Event = function (obj) {
-            this.obj = obj;
-            this.getSource = function () {
-                return this.obj;
-            }
-        }
-        // 监听对象
-        var F2 = function () {
-            this.hander = function (event) {
-                var f2 = event.getSource();
-                console.log("f2 do something!");
-                f2.callback();
-            }
-        }
-        // 被监听对象
-        var F1 = function () {
-            this.abc = function () {
-                console.log("f1 do something one!");
-// 创建事件对象
-                var e = new Event(this);
-// 发布事件
-                this.f2.hander(e);
-                console.log("f1 do something two!");
-            }
-
-            this.on = function (f2) {
-                this.f2 = f2;
-            }
-
-            this.callback = function () {
-                console.log("f1 callback invoke!");
-            }
-        }
-        // 主函数
-        function main() {
-            var f1 = new F1();
-            var f2 = new F2();
-// 加入监听
-            f1.on(f2);
-            f1.abc();
-        }
-        // 运行主函数
-        main();*/
-
-
-//          var arr=[ ];
-//        for (var i=1;i<3;i++) {
-//            arr[i]=function(idx) {
-//                console.log('var '+idx);
-//            }(i);
-//        }
-//        console.log('====================='+ arr[1]);
-//        arr[0];
-//        arr[1];
-//        arr[2];
+        var a = new DummyObjectA();
+//        _.invoke([a], "sum", 1, 2);
+//        ClassUtil.invoke(a, "sum", [1, 2]);
+        var args = [1, 2];
+        _.invoke([a], "sum", args);
+        _.invoke([a], "sum", Array.prototype.slice.call(args, 0));
 
     </script>
 
