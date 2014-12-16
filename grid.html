@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GRID!</title>
+    <!--<script src="jquery-1.11.1.min.js"></script>-->
+    <link rel="stylesheet" href="css/themes/smoothness/jquery-ui.css">
+    <script src="js/jquery-1.10.2.js"></script>
+    <script src="js/jquery-ui-1.11.2.js"></script>
+
+    <!--<script src="js/jquery-1.8.3.min.js"></script>-->
+
+
+    <script src="js/Engine2.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/underscore-min.js"></script>
+    <script src="js/Box.js"></script>
+
+    <style>
+       body{ text-align:center}
+
+       #content{
+          margin-top: 100px;
+           margin-left: 100px;
+       }
+
+       #boxDiv {
+            float: left;
+           margin-left: 50px;;
+       }
+
+       #expressionlist{
+           width: 350px;
+           height: 350px;
+       }
+
+       #boxList{
+           margin-top: 15px;
+           margin-bottom: 15px;
+       }
+
+        form input {
+            width: 23px;
+            float: right;
+        }
+
+        form label {
+            height: 25px;
+            clear: right;
+            position: relative;
+            width: 150px;
+            display: block;
+        }
+
+        #grid {
+            border: 1px solid black;
+            position: relative;
+            background: none repeat scroll 0 0 #ccc;
+               float: left;
+        }
+
+        /*#grid:before {*/
+            /*content: "";*/
+            /*border-top: 1px solid rgba(0, 0, 0, 0.2);*/
+            /*height: 1px;*/
+            /*width: 100%;*/
+            /*left: 0;*/
+            /*top: 50%;*/
+            /*position: absolute;*/
+        /*}*/
+
+        /*#grid:after {*/
+            /*content: "";*/
+            /*border-left: 1px solid rgba(0, 0, 0, 0.2);*/
+            /*width: 1px;*/
+            /*height: 100%;*/
+            /*top: 0;*/
+            /*left: 50%;*/
+            /*position: absolute;*/
+        /*}*/
+
+        .pixel {
+            float: left;
+            /*background: white;*/
+            border: 1px solid #eee;
+            border-left: 0;
+            border-top: 0;
+            z-index: 1;
+        }
+
+        .origin-x {
+            border-right: 1px solid black;
+            z-index: 10;
+        }
+
+        .origin-y {
+            border-bottom: 1px solid black;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+
+<div id="content">
+
+
+
+<div id="grid">
+</div>
+
+    <div id="boxDiv">
+    <input type="button" value="create box" id="createBox"/>
+
+    <div id="boxList">
+        <!--<div id="box">-->
+        <input id="box" type="hidden" value=""/>
+        <!--</div>-->
+
+    </div>
+
+    <div id="parse">
+        <textarea id="expressionlist" placeholder='[
+{"id":"Box_2","method":"hide","args":["pulsate",{"times":200},1000]},
+{"id":"Box_4","method":"hide","args":["explode",{"pieces": 16},1000]}
+]'></textarea>
+        <input id="run" type="button" value="run"/>
+    </div>
+</div>
+
+    </div>
+
+
+<script>
+    // how many blocks in the x and y directions... so 10 is -10,10 / -10,10 (121 blocks)
+    var gridSize = 10;
+
+    // how big is each "pixel" - they are square, so this is width and height
+    var pixelSize = 20;
+
+    $(function () {
+        // draw the grid
+        var x, y;
+        for (y = gridSize; y >= -gridSize; y--) {
+            for (x = -gridSize; x <= gridSize; x++) {
+                var id = pixelId(x, y)
+                $("<div class='pixel' id='" + id + "'>").appendTo("#grid");
+            }
+        }
+
+        var gridPx = ((gridSize * 2) + 1) * (pixelSize + 1);
+        $("#grid").css({"width": gridPx + "px", "height": gridPx + "px"});
+        $(".pixel").css({"width": pixelSize + "px", "height": pixelSize + "px"});
+
+        function pixelId(x, y, append) {
+            if (append === undefined) {
+                append = "";
+            }
+            return append + "pixel_" + x + "_" + y;
+        }
+
+        function setPixel(x, y, color) {
+            $(pixelId(x, y, "#")).css("backgroundColor", color);
+        }
+
+        function getPixel(x, y) {
+            return $(pixelId(x, y, "#")).css("backgroundColor");
+        }
+
+//        $(".pixel").click(function () {
+//            var id = $(this).attr("id");
+//            var xy = id.split("_");
+//            var color = getPixel(xy[1], xy[2]);
+//            setPixel(xy[1], xy[2], (getPixel(xy[1], xy[2]) == "rgb(255, 255, 255)") ? "black" : "white")
+//        });
+
+
+        // for show box
+        boxMap = {};
+        var engine = new Engine("main_", 10000, null);
+        engine.maxIdleCount = 500;
+        engine.start();
+        $("#createBox").click(function () {
+
+
+            var boxId = _.uniqueId("_");
+//            var buttonId = _.uniqueId("button_");
+            var boxButton = $("#box").clone();
+            boxButton.attr("id", boxId);
+//            box.append(boxId);
+            boxButton.attr("type", "button");
+
+
+            boxButton.appendTo("#boxList");
+//            $("boxList").append(button);
+
+            var x = parseInt(20 * Math.random()) - 10;
+            var y = parseInt(20 * Math.random()) - 10;
+            console.log(x + " " + y);
+            var box = new Box(x, y);
+            boxMap[box.id] = box;
+            var pixelId = "#pixel_" + x + "_" + y;
+//            $(pixelId).html(box.id.split("_")[1]);
+              boxButton.val(box.id);
+//            $(pixelId).css({"background-color": "red"});
+
+//            $("#" + boxId).click(function () {
+////                 $(pixelId).toggle("explode", { pieces : 81 });
+////                $(pixelId).hide().css({visibility: "hidden", display: ""});
+////                  $(pixelId).toggle( "bounce", { times: 3000 }, "slow" );
+////                $(pixelId).css({"display":"block"});
+////                $(pixelId).css({"visibility":"hidden"});
+//
+//
+////                $( pixelId).toggle( "pulsate", { times: 10 } );
+//
+////                $( pixelId).show( "explode", 9);
+////                $( pixelId).show( "fold", 10000);
+////                $( pixelId).show( "pulsate", 100000);
+//
+//
+////                pulsate.x = x;
+////                pulsate.y = y;
+////                var exps = [];
+////                exps.unshift(pulsate);
+////                engine.addExpression(exps);
+//
+////                explode.x = x;
+////                explode.y = y;
+////                var exps = [];
+////                exps.unshift(explode);
+////                engine.addExpression(exps);
+////
+//
+//
+//                var exps = [];
+//                var exp = new Expression(box.x, box.y, "hide", ["pulsate", { times: 200 }, 1000]);
+////                var exp2 = new Expression(box.x, box.y, "show", ["pulsate",  { times: 200 }, 10000]);
+//                console.log(exp);
+//                exps.unshift(exp);
+//                engine.addExpression(exps);
+//
+//
+////                 var  args = ["pulsate", { times: 10 } , 1000, function () {console.log(" it is test for hide")}];
+////                    ClassUtil.invoke($(pixelId), "hide", args);
+////                $( pixelId).hide( "pulsate", { times: 10 }, 1000, function () {console.log(" it is test for hide")});
+//
+//
+//            });
+
+
+        });
+
+        $("#run").click(function () {
+            console.log("run ..........")
+//            var exp = new Expression(5, 5, "hide", ["pulsate", { times: 200 }, 1000]);
+//            console.log("exp " + JSON.stringify(exp));
+//            var e1 = '{"x":5,"y":5,"method":"hide","args":["pulsate",{"times":200},1000]}';
+//                console.log("e1 " + e1);
+//            var exp1 = JSON.parse(e1);
+//            console.log("exp1  x " + exp1.x);
+//            var e2 = JSON.stringify(exp);
+//                console.log("e2 " + e2);
+//            var exp2 = JSON.parse(e2);
+//            console.log("exp2  x " + exp2.x);
+
+//                var exps= [];
+//              var ex =  JSON.parse($("#expressionlist").val());
+//            exps.unshift(ex)
+//                 engine.addExpression(exps);
+
+
+                   var exps =  JSON.parse($("#expressionlist").val());
+//            exps.unshift(ex)
+                 engine.addExpression(exps);
+        });
+
+
+    });
+
+
+</script>
+
+
+</body>
+</html>

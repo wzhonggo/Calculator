@@ -76,7 +76,7 @@ Engine.prototype._workProcess = function () {
         return;
     }
     if (this.status == Engine.STATUS_BUSY) {
-        this._log('Engine is busy');
+        this._log(this.id  + ' is busy');
         return;
     }
 
@@ -226,7 +226,8 @@ Engine.prototype.addSubEngine = function (objctx) {
  * 从子engine队列中移除状态为Engine.STATUS_DEAD的子engine
  */
 Engine.prototype._purgeSubEngine = function () {
-    if (this.subEngines.length > 0) {
+//    if (this.subEngines.length > 0) {
+    if (this.status != Engine.STATUS_DEAD) {
         this._log(this.id + "  start remove sun engine ...");
         for (var index = 0; index < this.subEngines.length; index++) {
             this._log(this.id + "  start remove sun engine ..." + this.subEngines[index].status);
@@ -249,17 +250,31 @@ Engine.prototype.addExpression = function (expression) {
  * @param result
  */
 Engine.prototype._longTaskFinish = function (result) {
+
     var self = this;
+        self._log(self.id + " longTaskFinish start ... " );
 
     if (this.status != Engine.STATUS_DEAD) {
+
         self._log("finish result" + result);
         self._log(self.id + " results " + self.results);
-        self.results.push(result);
+        if (result != undefined) {
+            self.results.push(result);
+        }
         self.status = Engine.STATUS_IDLE;
+
+
     }
 
 
 };
+
+
+Engine.prototype.isAsync = function (methodName) {
+    return false;
+}
+
+
 
 
 function TaskQueue() {
