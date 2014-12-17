@@ -23,11 +23,11 @@ Box.prototype.init = function () {
 
 Box.prototype.show = function (effect, options, time, callback) {
 
-    $("#"+this.contentId).show(effect, options, time, callback);
+    $("#" + this.contentId).show(effect, options, time, callback);
 }
 
 Box.prototype.hide = function (effect, options, time, callback) {
-    $("#"+this.contentId).hide(effect, options, time, callback);
+    $("#" + this.contentId).hide(effect, options, time, callback);
 }
 
 
@@ -44,18 +44,20 @@ Engine.prototype._parseExpression = function (expression) {
 
     while (expression.length > 0) {
         var exp = expression.pop();
-        var sub = this.addSubEngine(null);
-        var f = function (x) {
-            return function (data) {
-                console.log("before _longTaskFinish , sub id is " + x.id);
-                return x._longTaskFinish(data);
-            };
-        }(sub);
-        sub.start();
+
         var box = boxMap[exp.id];
         if (box == undefined) {
             console.log("  not found obj  by id " + exp.id);
         } else {
+
+            var sub = this.addSubEngine(null);
+            var f = function (x) {
+                return function (data) {
+                    console.log("before _longTaskFinish , sub id is " + x.id);
+                    return x._longTaskFinish(data);
+                };
+            }(sub);
+            sub.start();
             exp.args.push(f)
             var task = new Task(box, exp.method, exp.args, _.uniqueId("task_"));
             var task2 = new Task(sub, "destroy", [], _.uniqueId("task_"))
@@ -78,6 +80,6 @@ function Expression(id, method, args) {
 
 // test code
 var test = [
-{"id":"Box_2","method":"hide","args":["pulsate",{"times":200},1000]},
-{"id":"Box_4","method":"hide","args":["explode",{"pieces": 16},1000]}
+    {"id": "Box_2", "method": "hide", "args": ["pulsate", {"times": 200}, 1000]},
+    {"id": "Box_4", "method": "hide", "args": ["explode", {"pieces": 16}, 1000]}
 ]
