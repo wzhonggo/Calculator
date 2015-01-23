@@ -11,8 +11,8 @@
     background: #ccc;
   }
   </style>
-  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
-  <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+    <script src="js/jquery-1.10.2.js"></script>
+    <script src="js/jquery-ui-1.11.2.js"></script>
 </head>
 <body>
  
@@ -21,7 +21,19 @@
  
 <script>
 $( "#test" ).click(function() {
-  $( "#toggle" ).toggle( "explode" );
+//  $( "#toggle" ).toggle( "explode" );
+       $( "#toggle").hide( "explode", {}, 10000, function () {console.log(" it is test for hide")});
+//    $( "#toggle").hide();
+       $( "#toggle").show();
+//     $( "#toggle").hide();
+//     $( "#toggle").show();
+    console.log("for test");
+//     $( "#toggle").show( "pulsate", { times: 10 }, 10000, function () {console.log(" it is test for show1")});
+//      $( "#toggle").hide( "pulsate", {times: 10}, 10000, function () {console.log(" it is test for hide2")});
+//    setTimeout(function(){
+//            $( "#toggle").show( "pulsate", { times: 10 }, 10000, function () {console.log(" it is test for show2")});
+//    }, 40000)
+
 });
 </script>
  
