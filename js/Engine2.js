@@ -76,7 +76,7 @@ Engine.prototype._workProcess = function () {
         return;
     }
     if (this.status == Engine.STATUS_BUSY) {
-        this._log(this.id  + ' is busy');
+        this._log(this.id + ' is busy');
         return;
     }
 
@@ -252,7 +252,7 @@ Engine.prototype.addExpression = function (expression) {
 Engine.prototype._longTaskFinish = function (result) {
 
     var self = this;
-        self._log(self.id + " longTaskFinish start ... " );
+    self._log(self.id + " longTaskFinish start ... ");
 
     if (this.status != Engine.STATUS_DEAD) {
 
@@ -273,8 +273,6 @@ Engine.prototype._longTaskFinish = function (result) {
 Engine.prototype.isAsync = function (methodName) {
     return false;
 }
-
-
 
 
 function TaskQueue() {

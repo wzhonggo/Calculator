@@ -84,7 +84,7 @@
 
             //数据源全部加载完毕，则逐一运行dataReadyFunc中存放的函数
             , callReady: function () {
-                  var self = this;
+                var self = this;
 //                console.log("callReady   ....." + this.dataSource[0].data +this.operator  + this.dataSource[1].data  + " " + this.isReady());
                 if (true === self.isReady()) {
 //                    for (var key in self.dataReadyFunc) {
@@ -92,7 +92,7 @@
 ////                        self.resultNum = self.dataReadyFunc[key](self.dataSource[0].data, self.dataSource[1].data, self.operator);
 //                         console.log("this.resultNum : " + self.resultNum);
 //                    }
-                        console.log("callReady   ....." + math.dataSource[0].data + this.operator + this.dataSource[1].data + " " + this.isReady());
+                    console.log("callReady   ....." + math.dataSource[0].data + this.operator + this.dataSource[1].data + " " + this.isReady());
                     this.resultNum = calculator.operator(this.dataSource[0].data, this.dataSource[1].data, this.operator);
                     this.num.push(this.resultNum);
                     console.log("this.resultNum : " + this.resultNum);
@@ -177,7 +177,6 @@
 //                }
 
 
-
 //                var test = setTimeout(this.isReady(), 2000);
 //                while (test) {
 //                    test = setTimeout(this.isReady(), 2000);
@@ -185,21 +184,21 @@
 //                clearTimeout(test);
 
                 console.log("get result 1 :  " + self.resultNum);
-                for(var index=0; index < self.dataSource.length; index++){
+                for (var index = 0; index < self.dataSource.length; index++) {
                     console.log("self.datasource.index  " + self.dataSource[index].data);
                 }
-                 if(this.resultNum=="$"){
+                if (this.resultNum == "$") {
 
-                     setTimeout(function(){
-                          console.log("get result 2 :  " + self.resultNum);
-                         self.getResult();
-                     },200000);
+                    setTimeout(function () {
+                        console.log("get result 2 :  " + self.resultNum);
+                        self.getResult();
+                    }, 200000);
 
-                     setTimeout(calculator.getABC,2000);
-                }else{
-                      console.log("get result :  " + self.resultNum);
-                      return this.resultNum;
-                 }
+                    setTimeout(calculator.getABC, 2000);
+                } else {
+                    console.log("get result :  " + self.resultNum);
+                    return this.resultNum;
+                }
 
             }
 
@@ -455,7 +454,7 @@
 //                console.log("result =" + math.result);
 //                 setInterval(function(){console.log("it is test")}, 10000);
 //                num.push(math.getResult());
-                console.log("===================getResult=============================="+ one.data , + data, +two.data);
+                console.log("===================getResult==============================" + one.data, +data, +two.data);
 //                 math.dataSource=[];
 //                math.resultNum="$"
 //                console.log("num after  push ");
@@ -775,15 +774,14 @@
         return result;
     }
 
-      Calculator.prototype.abc = 1;
-        Calculator.prototype.getABC = function () {
+    Calculator.prototype.abc = 1;
+    Calculator.prototype.getABC = function () {
 
         console.log("---------ABC---------- " + this.abc);
         console.log("---------ABC---------- " + calculator.abc);
-         var a = this;
-          console.log("---------ABC---------- " + a.abc);
+        var a = this;
+        console.log("---------ABC---------- " + a.abc);
     }
-
 
 
 //    Calculator.prototype.getValue = function () {

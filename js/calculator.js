@@ -20,41 +20,41 @@
                 var self = this;
 
                 if (obj == "#") {
-            /*        $.ajax({
-                        url: "http://127.0.0.1:9000/value.html",
-//                        url: "http://127.0.0.1:18080/salsa_test/user/welcome.htm",
-//                                async:false,
-//                                        crossDomain: true,
-                        success: function get(data, textStatus) {
-//                                    console.log('received ', data);
-                            var random = parseInt(Math.random() * 10 + 1);
-//                                    $("#value").html(random);
-//                                    console.log('received ', $("#value").html());
-//                            console.log('received ', random);
-//                                    obj.data =random;
-                            obj = parseFloat(5);
-                            self.num.push(obj);
-                            self.callback();
+                    /*        $.ajax({
+                     url: "http://127.0.0.1:9000/value.html",
+                     //                        url: "http://127.0.0.1:18080/salsa_test/user/welcome.htm",
+                     //                                async:false,
+                     //                                        crossDomain: true,
+                     success: function get(data, textStatus) {
+                     //                                    console.log('received ', data);
+                     var random = parseInt(Math.random() * 10 + 1);
+                     //                                    $("#value").html(random);
+                     //                                    console.log('received ', $("#value").html());
+                     //                            console.log('received ', random);
+                     //                                    obj.data =random;
+                     obj = parseFloat(5);
+                     self.num.push(obj);
+                     self.callback();
 
 
-                        },
+                     },
 
-                        dataType: "html"
+                     dataType: "html"
 
 
-                    });*/
+                     });*/
 
-                    setTimeout(function(){
+                    setTimeout(function () {
                         var random = parseInt(Math.random() * 10 + 1);
 //                                    $("#value").html(random);
 //                                    console.log('received ', $("#value").html());
 //                            console.log('received ', random);
 //                                    obj.data =random;
-                            obj = parseFloat(5);
-                            self.num.push(obj);
-                            self.callback();
-                            engine.suspend = false;
-                    } , 5000);
+                        obj = parseFloat(5);
+                        self.num.push(obj);
+                        self.callback();
+                        engine.suspend = false;
+                    }, 5000);
                     engine.suspend = true;
 
 
